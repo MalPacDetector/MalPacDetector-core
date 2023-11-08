@@ -1,0 +1,92 @@
+{
+    "path": {
+        "datasets": "datasets/MalnpmDB",
+        "models": "models",
+        "reports": "reports",
+        "features": "features",
+        "feature-positions": "feature-positions"
+    },
+    "classifier": {
+        "models": [
+            "NB",
+            "MLP",
+            "RF",
+            "SVM"
+        ],
+        "preprocess_methods": [
+            "none",
+            "standardlize",
+            "min-max-scale"
+        ],
+        "hyperparameters": {
+            "NB": {
+                "smoothings": [
+                    1e-09,
+                    1e-08,
+                    1e-07,
+                    1e-06,
+                    1e-05,
+                    0.0001
+                ]
+            },
+            "MLP": {
+                "learning_rates": [
+                    0.05045994670005887,
+                    0.10144109595857453,
+                    0.17385803166469083,
+                    0.17382621884779412,
+                    0.05255545233279812
+                ],
+                "number_of_hidden_units": [
+                    16,
+                    32,
+                    100,
+                    150
+                ],
+                "number_of_iterations": [
+                    400,
+                    600
+                ],
+                "optimization_algorithms": [
+                    "lbfgs",
+                    "adam"
+                ],
+                "activation_functions": [
+                    "logistic"
+                ]
+            },
+            "RF": {
+                "number_of_decision_trees": [
+                    16,
+                    32,
+                    64,
+                    100,
+                    128,
+                    256,
+                    512
+                ],
+                "maxium_depths": [
+                    3,
+                    5,
+                    7,
+                    11,
+                    15
+                ]
+            },
+            "SVM": {
+                "gammas": [
+                    "scale",
+                    "auto",
+                    0.21150505,
+                    0.17463293,
+                    0.12063201
+                ],
+                "C": [
+                    1.1666208879984832,
+                    0.5315214640416588,
+                    1.070439127122467
+                ]
+            }
+        }
+    }
+}
