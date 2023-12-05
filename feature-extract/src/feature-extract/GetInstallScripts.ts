@@ -50,7 +50,7 @@ export async function getAllJSFilesInInstallScript (jsFilesInInstallScript: stri
                         accessSync(importScript)
                         jsFilesInInstallScript.push(importScript)
                       } catch (error) {
-                        console.log(error)
+                        // console.log(error)
                       }
                     }
                   }

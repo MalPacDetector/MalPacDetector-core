@@ -1,4 +1,5 @@
 /* eslint-disable no-lone-blocks */
+import path from 'path'
 import { parse } from '@babel/core'
 import traverse from '@babel/traverse'
 import { type PackageFeatureInfo } from './PackageFeatureInfo'
@@ -7,7 +8,8 @@ import {
   base64_Pattern,
   getDomainPattern,
   IP_Pattern,
-  SensitiveStringPattern
+  SensitiveStringPattern,
+  getDomainsType
 } from './Patterns'
 import { getFileLogger } from '../FileLogger'
 import { type PositionRecorder, type Record } from './PositionRecorder'
@@ -105,23 +107,14 @@ export async function extractFeaturesFromJSFileByAST (
               moduleName === 'axios' ||
               moduleName === 'request' ||
               moduleName === 'node-fetch' ||
-              moduleName === 'got'
+              moduleName === 'got' ||
+              moduleName === 'dns'
             ) {
               featureSet.useNetwork = true
               positionRecorder.addRecord('useNetwork', getRecord(path))
               if (isInstallScript) {
                 featureSet.useNetworkInScript = true
                 positionRecorder.addRecord('useNetworkInScript', getRecord(path))
-              }
-            }
-          }
-          if (path.node.arguments.length > 0) {
-            // @ts-expect-error uselesss lint error
-            const moduleName = path.node.arguments[0].value as string
-            if (moduleName === 'dns') {
-              featureSet.includeDomain = true
-              if (isInstallScript) {
-                featureSet.includeDomainInScript = true
               }
             }
           }
@@ -175,11 +168,27 @@ export async function extractFeaturesFromJSFileByAST (
         {
           const matchResult = content.match(getDomainPattern())
           if (matchResult != null) {
-            featureSet.includeDomain = true
-            positionRecorder.addRecord('includeDomain', getRecord(path))
+            const domainType = getDomainsType(matchResult)
+            if (featureSet.includeDomain < domainType) {
+              featureSet.includeDomain = domainType
+            }
+            for (const domain of matchResult) {
+              positionRecorder.addRecord('includeDomain', {
+                filePath: targetJSFilePath,
+                content: domain
+              })
+            }
             if (isInstallScript) {
-              featureSet.includeDomainInScript = true
-              positionRecorder.addRecord('includeDomainInScript', getRecord(path))
+              const domainType = getDomainsType(matchResult)
+              if (featureSet.includeDomainInScript < domainType) {
+                featureSet.includeDomainInScript = domainType
+              }
+              for (const domain of matchResult) {
+                positionRecorder.addRecord('includeDomainInScript', {
+                  filePath: targetJSFilePath,
+                  content: domain
+                })
+              }
             }
           }
         }
@@ -258,21 +267,15 @@ export async function extractFeaturesFromJSFileByAST (
             moduleName === 'nodemailer' ||
             moduleName === 'aixos' ||
             moduleName === 'request' ||
-            moduleName === 'node-fetch'
+            moduleName === 'node-fetch' ||
+            moduleName === 'got' ||
+            moduleName === 'dns'
           ) {
             featureSet.useNetwork = true
             positionRecorder.addRecord('useNetwork', getRecord(path))
             if (isInstallScript) {
               featureSet.useNetworkInScript = true
               positionRecorder.addRecord('useNetworkInScript', getRecord(path))
-            }
-          }
-        }
-        {
-          if (moduleName === 'dns') {
-            featureSet.includeDomain = true
-            if (isInstallScript) {
-              featureSet.includeDomainInScript = true
             }
           }
         }

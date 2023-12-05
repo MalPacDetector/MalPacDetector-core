@@ -1,7 +1,7 @@
 import path from 'path'
 import promises from 'fs/promises'
 import { getPackageJSONInfo, type PackageJSONInfo } from './PackageJSONInfo'
-import { getDomainPattern, IP_Pattern, Network_Command_Pattern, SensitiveStringPattern } from './Patterns'
+import { getDomainPattern, IP_Pattern, Network_Command_Pattern, SensitiveStringPattern, getDomainsType } from './Patterns'
 import { getAllJSFilesInInstallScript } from './GetInstallScripts'
 import { extractFeaturesFromJSFileByAST } from './AST'
 import { matchUseRegExp } from './RegExp'
@@ -19,8 +19,8 @@ export interface PackageFeatureInfo {
   useBase64ConversionInScript: boolean
   includeBase64String: boolean
   includeBase64StringInScript: boolean
-  includeDomain: boolean
-  includeDomainInScript: boolean
+  includeDomain: number
+  includeDomainInScript: number
   includeByteString: boolean
   useBuffer: boolean
   useEval: boolean
@@ -53,8 +53,8 @@ export async function getPackageFeatureInfo (packagePath: string): Promise<Packa
     includeBase64String: false,
     includeBase64StringInScript: false,
     includeByteString: false,
-    includeDomain: false,
-    includeDomainInScript: false,
+    includeDomain: 0,
+    includeDomainInScript: 0,
     useBuffer: false,
     useEval: false,
     useProcess: false,
@@ -100,11 +100,16 @@ export async function getPackageFeatureInfo (packagePath: string): Promise<Packa
         {
           const matchResult = scriptContent.match(getDomainPattern())
           if (matchResult != null) {
-            result.includeDomainInScript = true
-            positionRecorder.addRecord('includeDomainInScript', {
-              filePath: packageJSONPath,
-              content: scriptContent
-            })
+            const domainType = getDomainsType(matchResult)
+            if (result.includeDomainInScript < domainType) {
+              result.includeDomainInScript = domainType
+            }
+            for (const domain of matchResult) {
+              positionRecorder.addRecord('includeDomainInScript', {
+                filePath: packageJSONPath,
+                content: domain
+              })
+            }
           }
         }
         {

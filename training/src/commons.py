@@ -9,6 +9,8 @@ def getCurrentDir():
     return os.path.dirname(os.path.abspath(__file__))
 
 table_path = os.path.join(getCurrentDir(), '..', 'results')
+if not os.path.exists(table_path):
+    os.makedirs(table_path)
 
 field_names = ["hyperparamter", "TP", "FP", "TN", "FN", "accuracy", "precision", "recall", "f1", "MCC"]
 

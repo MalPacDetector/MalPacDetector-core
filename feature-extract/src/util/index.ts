@@ -16,7 +16,6 @@ export function getRootDirectory () {
 }
 
 /**
-<<<<<<< HEAD
  * Get the actual package path from a directory. 
  * It is considered that the directory where the package.json file is located is the actual directory of the package,
  * and if there are multiple package.json files, the lower level of the directory is the actual directory of the package.
@@ -66,16 +65,12 @@ export async function getPackageFromDir(packageDirPath: string) {
  * Get all packages from a directory. 
  * It is considered that the directory where the package.json file is located is the actual directory of the package,
  * and if there are multiple package.json files, the lower level of the directory is the actual directory of the package.
-=======
- * Get all packages from a directory.
->>>>>>> 58a8968 (init)
  * @param packageDirPath the path to the directory to be searched
  * @returns all pakcages in the directory
  */
 export async function getPackagesFromDir (packageDirPath: string) {
   const result: string[] = []
   async function resolve (dirPath: string) {
-<<<<<<< HEAD
     const fileAndDirs = readdirSync(dirPath, { withFileTypes: true })
     const files = fileAndDirs.filter(fileOrDir => fileOrDir.isFile())
     const dirs = fileAndDirs.filter(fileOrDir => fileOrDir.isDirectory())
@@ -88,16 +83,6 @@ export async function getPackagesFromDir (packageDirPath: string) {
     for (const dir of dirs) {
       if (dir.name !== 'node_modules') {
         await resolve(join(dirPath, dir.name))
-=======
-    const files = readdirSync(dirPath, { withFileTypes: true })
-    for (const file of files) {
-      if (file.name === 'package.json'/* && basename(dirPath) === 'package'*/) {
-        result.push(dirPath)
-        return
-      }
-      if (file.isDirectory() && file.name !== 'node_modules') {
-        await resolve(join(dirPath, file.name))
->>>>>>> 58a8968 (init)
       }
     }
   }
