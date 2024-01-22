@@ -34,6 +34,7 @@ export interface PackageFeatureInfo {
   useProcessEnvInScript: boolean
   useEncryptAndEncode: boolean
   useOperatingSystem: boolean
+  includeObfuscatedCode: boolean
   includeSensitiveFiles: boolean
   installCommand: string[]
   executeJSFiles: string[]
@@ -67,6 +68,7 @@ export async function getPackageFeatureInfo (packagePath: string): Promise<Packa
     useProcessEnvInScript: false,
     useEncryptAndEncode: false,
     useOperatingSystem: false,
+    includeObfuscatedCode: false,
     includeSensitiveFiles: false,
     installCommand: [],
     executeJSFiles: [],

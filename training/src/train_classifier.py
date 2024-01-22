@@ -100,67 +100,6 @@ def train(malcious_features_dir_paths: [], normal_features_dir_paths: [], prepro
             save_SVM(X_train, y_train, gamma=hyperparameters.get('gamma'), C=hyperparameters.get('C'))
 
 
-def train2(malcious_features_dir_path: str, normal_features_dir_path: str, preprocess_method: PreprocessMethodEnum, model: ModelEnum, action: ActionEnum, hyperparameters={}):
-    """Train the model.
-    
-    Args:
-        malcious_features_dir_path: The path of the directory containing multiple malicious sample feature files.
-        normal_features_dir_path: The path of the directory containing multiple benign sample feature files.
-        preprocess_method: The method of data preprocessing.
-        model: The model to be trained.
-        action: The action to be performed.
-        hyperparameters: The hyperparameters of the model.
-    """
-    [X, y, _] = read_features(malcious_features_dir_path, normal_features_dir_path)
-    X_train = X
-    y_train = y
-
-    # preprocess
-    if model == ModelEnum.RF:
-        scaler_save_path = rf_scaler_save_path
-    elif model == ModelEnum.MLP:
-        scaler_save_path = mlp_scaler_save_path
-    elif model == ModelEnum.NB:
-        scaler_save_path = nb_scaler_save_path
-    elif model == ModelEnum.SVM:
-        scaler_save_path = svm_scaler_save_path
-    [X_train] = preprocess(X_train, scaler_save_path, preprocess_method)
-
-    # training and validation
-    if action == ActionEnum.TRAINING:
-        if model == ModelEnum.RF:
-            train_classifier_RF_Validation(X_train, y_train)
-        elif model == ModelEnum.MLP:
-            train_MLP_validation(X_train, y_train)
-        elif model == ModelEnum.NB:
-            train_NB_Validate(X_train, y_train)
-        elif model == ModelEnum.SVM:
-            train_SVM_validate(X_train, y_train)
-
-    # save model
-    elif action == ActionEnum.SAVE:
-        if model == ModelEnum.RF:
-            if hyperparameters.get('number_of_decision_trees') is None or hyperparameters.get('maxium_depth') is None:
-                raise Exception('Hyperpameters cannot be empty.')
-            save_RF(X_train, y_train, number_of_decision_trees=hyperparameters.get('number_of_decision_trees'), maxium_depth=hyperparameters.get('maxium_depth'))
-        elif model == ModelEnum.MLP:
-            if hyperparameters.get('learning_rate') is None or \
-                hyperparameters.get('number_of_hidden_units') is None or \
-                hyperparameters.get('number_of_iterations') is None or \
-                hyperparameters.get('optimization') is None or \
-                hyperparameters.get('activation') is None:
-                raise Exception('Hyperpameters cannot be empty.')
-            save_MLP(X_train, y_train, learning_rate=hyperparameters.get('learning_rate'), number_of_hidden_units=hyperparameters.get('number_of_hidden_units'), number_of_iterations=hyperparameters.get('number_of_iterations'), optimization=hyperparameters.get('optimization'), activation=hyperparameters.get('activation'))
-        elif model == ModelEnum.NB:
-            if hyperparameters.get('smoothing') is None:
-                raise Exception('Hyperpameters cannot be empty.')
-            save_NB(X_train, y_train, smoothing=hyperparameters.get('smoothing'))
-        elif model == ModelEnum.SVM:
-            if hyperparameters.get('gamma') is None or \
-                hyperparameters.get('C') is None:
-                raise Exception('Hyperpameters cannot be empty.')
-            save_SVM(X_train, y_train, gamma=hyperparameters.get('gamma'), C=hyperparameters.get('C'))
-
 def preprocess(X_train, scaler_save_path: str, preprocess_method: PreprocessMethodEnum) -> list:
     """Preprocess the data.
     

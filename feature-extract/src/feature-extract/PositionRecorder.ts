@@ -39,6 +39,7 @@ export class PositionRecorder {
     useProcessEnvInScript: [],
     useEncryptAndEncode: [],
     useOperatingSystem: [],
+    includeObfuscatedCode: [],
     includeSensitiveFiles: []
   }
 

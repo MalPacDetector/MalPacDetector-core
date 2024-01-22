@@ -290,6 +290,9 @@ export async function extractFeaturesFromJSFileByAST (
         if (path.node.name === 'eval') {
           featureSet.useEval = true
           positionRecorder.addRecord('useEval', getRecord(path))
+        } else if (path.node.name?.startsWith('_0x')) {
+          featureSet.includeObfuscatedCode = true
+          positionRecorder.addRecord('includeObfuscatedCode', getRecord(path))
         }
       }
     })

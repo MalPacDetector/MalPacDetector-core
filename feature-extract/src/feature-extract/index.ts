@@ -37,6 +37,7 @@ export async function extractFeatureFromPackage (packagePath: string, featureDir
   featureArr.push(['containSuspicousString', result.includeSensitiveFiles])
   featureArr.push(['useEncryptAndEncode', result.useEncryptAndEncode])
   featureArr.push(['useOperatingSystem', result.useOperatingSystem])
+  featureArr.push(['includeObfuscatedCode', result.includeObfuscatedCode])
   await new Promise(resolve => {
     setTimeout(async () => {
       await promises.writeFile(csvPath, stringify(featureArr, {

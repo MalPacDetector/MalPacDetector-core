@@ -170,27 +170,32 @@ def train_cli():
     elif action_name == 'save':
         action = ActionEnum.SAVE
 
+        if model_name == 'MLP':
+            hyperparameters['learning_rate'] = args.hyper_rate
+            hyperparameters['number_of_hidden_units'] = args.hyper_layers
+            hyperparameters['number_of_iterations'] = args.hyper_iterations
+            hyperparameters['optimization'] = args.hyper_optimization
+            hyperparameters['activation'] = args.hyper_activation
+        elif model_name == 'NB':
+            hyperparameters['smoothing'] = args.hyper_smoothing
+        elif model_name == 'SVM':
+            try:
+                hyperparameters['gamma'] = float(args.hyper_gamma)
+            except Exception:
+                hyperparameters['gamma'] = args.hyper_gamma
+            hyperparameters['C'] = args.hyper_C
+        elif model_name == 'RF':
+            hyperparameters['number_of_decision_trees'] = args.hyper_trees
+            hyperparameters['maxium_depth'] = args.hyper_depth
+    
     if model_name == 'MLP':
         model = ModelEnum.MLP
-        hyperparameters['learning_rate'] = args.hyper_rate
-        hyperparameters['number_of_hidden_units'] = args.hyper_layers
-        hyperparameters['number_of_iterations'] = args.hyper_iterations
-        hyperparameters['optimization'] = args.hyper_optimization
-        hyperparameters['activation'] = args.hyper_activation
     elif model_name == 'NB':
         model = ModelEnum.NB
-        hyperparameters['smoothing'] = args.hyper_smoothing
     elif model_name == 'SVM':
         model = ModelEnum.SVM
-        try:
-            hyperparameters['gamma'] = float(args.hyper_gamma)
-        except ValueError:
-            hyperparameters['gamma'] = args.hyper_gamma
-        hyperparameters['C'] = args.hyper_C
     elif model_name == 'RF':
         model = ModelEnum.RF
-        hyperparameters['number_of_decision_trees'] = args.hyper_trees
-        hyperparameters['maxium_depth'] = args.hyper_depth
 
     train(malicous_csv_dir_paths, benign_csv_dir_paths, preprocess, model, action, hyperparameters)
 
@@ -227,8 +232,6 @@ def predict_single_package(package_path: str):
         exit(1)
     feature_path = os.path.abspath(SETTINGS['path']['features'])
     feature_position_path = os.path.abspath(SETTINGS['path']['feature-positions'])
-    # feature_path = os.path.abspath(os.path.join(SETTINGS['path']['features'], package_name))
-    # feature_position_path = os.path.abspath(os.path.join(SETTINGS['path']['feature-positions'], package_name))
 
     try:
         cwd = os.getcwd()
