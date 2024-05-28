@@ -160,6 +160,7 @@ $ python3 cli.py predict -o <model_name> -p <package_path>
 - Training and Validation Results: Model training and validation results are stored in `trainging/result` directory, which named `***_validation.csv`, where `***` represents model name.
 
 ## Contact
+For security reasons, we can't put the malicious packet data set here. If you need the data set, please send an email to **hust_jianw@hust.edu.cn**.
 Any bug report or improvement suggestions will be appreciated. Please kindly cite our paper if you use the code or data in your work.
 
 Thanks!
