@@ -1,0 +1,14 @@
+.DS_Store
+.vscode/
+__pycache__/
+/.decompressed-packages/
+/feature-extract/node_modules/
+/feature-extract/dist/
+/training/results
+/training/env/
+/training/results/
+/features/
+/feature-positions/
+/reports/
+/temp/
+/datasets
