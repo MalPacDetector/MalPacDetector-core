@@ -1,0 +1,12 @@
+{
+   "compilerOptions": {
+      "sourceMap": true,
+      "moduleResolution": "node",
+      "outDir": "out",
+      "esModuleInterop": true,
+      "target": "ES6",
+      "strictNullChecks": true,
+      "resolveJsonModule": true,
+   },
+   "exclude": ["material"]
+}
